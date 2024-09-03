@@ -15,10 +15,7 @@ impl<T: Iterator> IteratorExt for T {
     fn get_one(mut self) -> Result<Self::Item, GetOneError> {
         match self.next() {
             None => Err(GetOneError::None),
-            Some(res) => match self.next() {
-                Some(_) => Err(GetOneError::Multiple),
-                None => Ok(res),
-            },
+            Some(res) => Ok(res),
         }
     }
 }
@@ -54,7 +51,10 @@ fn main() {
         crate_dir.display(),
         chip_core_name
     );
-    println!("cargo:rustc-env=STM32_METAPAC_PAC_PATH=chips/{}/pac.rs", chip_core_name);
+    println!(
+        "cargo:rustc-env=STM32_METAPAC_PAC_PATH=chips/{}/pac.rs",
+        chip_core_name
+    );
     println!(
         "cargo:rustc-env=STM32_METAPAC_METADATA_PATH=chips/{}/metadata.rs",
         chip_core_name
